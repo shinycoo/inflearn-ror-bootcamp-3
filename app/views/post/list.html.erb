@@ -1,0 +1,38 @@
+<h3>방명록 리스트</h3>
+<a href="/post/new" style="float:right;display:inline-block;">
+    <button>새 글</button>
+</a>
+<% if session[:logined] %>
+    <span>환영합니다. <%=session[:user]['name']%>님</span>
+    <a href="/user/logout">
+        <button>로그아웃</button>
+    </a>
+<% else %>
+    <a href="/user/new">
+        <button>회원가입</button>
+    </a>
+    <a href="/user/login_form">
+        <button>로그인</button>
+    </a>
+<% end %>
+<ul>
+    <% @posts.each do |post| %>
+    <li>
+        <h4><%=post.id%>, <%=post.title%></h4>
+        <a href="/post/modify?id=<%=post.id%>">수정</a>
+        <a href="/post/delete?id=<%=post.id%>">삭제</a>
+        <a href="/comment/new?id=<%=post.id%>">댓글</a>
+        <hr>
+        <%=post.contents%>
+        <hr>
+        <%=post.author%>, <%=post.created_at.in_time_zone(9).to_formatted_s(:short)  %>
+        
+        <hr>
+        <ol>
+        <% post.comments.each do |comment| %>
+            <li><%=comment.contents%>, <a href="/comment/delete?id=<%=comment.id%>">X</a></li>
+        <% end %>
+        </ol>
+    </li>
+    <% end %>
+</ul>
